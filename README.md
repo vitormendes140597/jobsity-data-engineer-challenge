@@ -30,7 +30,10 @@
   - [Sketch up on Cloud](#sketch-up-on-cloud)
     - [Would I migrate it to Cloud as Lift and Shift?](#would-i-migrate-it-to-cloud-as-lift-and-shift)
     - [Microsoft Azure](#microsoft-azure)
-    - [AWS](#aws)
+      - [Architecture 1 - FanIn FanOut](#architecture-1---fanin-fanout)
+      - [Architecture 2 - Databricks LakeHouse](#architecture-2---databricks-lakehouse)
+      - [Architecture 3 - Route Events](#architecture-3---route-events)
+      - [Architecture 4 - DataWarehouse](#architecture-4---datawarehouse)
 
 ## About the Challenge
 
@@ -184,8 +187,51 @@ docker-compose up
 
 #### Would I migrate it to Cloud as Lift and Shift?
 
-Please take notice that the architecture I've proposed here is based on challenge's mandatory features. It does not reflect what I'd do if I was in a cloud native scenario. Because of that, instead of saying how I'd migrate it to cloud, I prefer to redesign and rearchitect my solution, based on each cloud providers I'm experienced in.
+Please take notice that the architecture I've proposed here is based on challenge's mandatory features. It does not reflect what I'd do if I was in a cloud native scenario. Because of that, instead of saying how I'd migrate it to cloud, I prefer to redesign and rearchitect my solution, based on cloud providers I'm most experienced in which is Microsoft Azure.
 
 #### Microsoft Azure
 
-#### AWS
+##### Architecture 1 - FanIn FanOut
+<img src="images/funin-funout.png" alt="drawing"/>
+
+This architecture show how to process using Serveless pattern with Azure Functions called *FanIn FanOut*, where a orchestator function knows what are the files that should be processed. It invokes in parallel other functions, so each one can process a subset of files. Since Az Function is scalable, it could process thousands of files.
+
+Azure Function has a feature called **Durable Functions**, where the orchestrator sleeps until its receive a callback from processor functions, avoiding additional costs, as we know that serveless computing at cloud is billed by num of cpu and RAM * seconds running.
+
+In DB side we trust in Microsft PostgreSQL Managed solution, where we can install Timeseries extension. So we can have the powerfull features of timeseries analytics on top of cloud elasticity and scalability.
+
+##### Architecture 2 - Databricks LakeHouse
+
+<img src="images/databricks.png" alt="drawing"/>
+
+Above architecture is based on Databricks platform (or any other that supports Apache Spark and Delta Lake).
+
+This approach is very often used when the client wants to build his own Datalake solution on top of a very robust technologies.
+
+To process data on demand, we could use Apache Spark Structured Streaming to ingest continuosly data from file system or message system like Apache Kafka, EventHubs etc...
+
+Once it's processed, data are stored in Delta Table format which allows us to bring ACID properties from Databases to our Datalake Storage.
+
+All the initial transformation could be done by Spark and after, only a subset of data which will be used to awnser business questions can be written into a DataWarehouse solution like Azure Synapse Analytics.
+
+##### Architecture 3 - Route Events
+
+<img src="images/eventgrid.png" alt="drawing"/>
+
+This architecture relies on Azure Event Grid to start on demand ETL process. Every time a file is written in a specific folder in Azure Blob Storage or ADLS, a event will be trigger.
+
+This event must have a ```event handler```, who is responsible for handle this event.
+
+We could use it to process a csv file imediatly after its creation on storage.
+
+An Azure function can be used to write data directly into DB, or we can send a HTTP Request to an API (like I did), using Azure Web App, and its take the responsibility to orchestrate and insert data into DB.
+
+##### Architecture 4 - DataWarehouse
+
+<img src="images/synapse-analytics.png" alt="drawing"/>
+
+This final one relies on Azure Synapse Analytics which is one of the newest data products from Microsoft. Synapse is a kind of Distributed Data Warehouse which can process  a massive amout of data. It also is capable to process unstructure data since has an Apache Spark cluster coupled with it.
+
+Usually data on DW are modelled in a way that is easily to query like Star Schema, Snowflake Schema etc...
+
+On downside of this product is that it's very expensive. Most of clients I've been working prefer Databricks to make ETL instead of Synapse.
