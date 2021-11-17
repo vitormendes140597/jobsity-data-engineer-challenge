@@ -13,6 +13,8 @@
 - [About the Challenge](#about-the-challenge)
   - [Candidate Considerations](#candidate-considerations)
   - [Proposed Architecture](#proposed-architecture)
+  - [Architecture Discussion](#architecture-discussion)
+    - [Data Modelling](#data-modelling)
 
 ## About the Challenge
 
@@ -27,3 +29,19 @@ In addition of that, one of the bonus question **asks to sketch up how I'd do th
 ###  Proposed Architecture
 
 <img src="images/jobsity-architecture.png" alt="drawing"/> 
+
+###  Architecture Discussion
+
+#### Data Modelling
+
+The dataset is about Uber trips. It contains the region, origin coordinates, destination coordinates, a timestamp field about when it happened and which car attended that trip.
+
+Since challenge's questions is about time oriented (e.g how many weekly trips occurred for a given region) and records doesn't have any unique key identifier, I've decided to model data in a **timeseries** way.
+
+Using a **timeseries approach** will provide some benefits such as:
+
+* Easily query data that requires time oriented filters
+* Possibility to identify trends over time
+* Great fit with predictive analytics
+
+<img src="images/dataset-sample.PNG" alt="drawing"/> 
