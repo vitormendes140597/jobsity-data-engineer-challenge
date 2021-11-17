@@ -234,4 +234,4 @@ This final one relies on Azure Synapse Analytics which is one of the newest data
 
 Usually data on DW are modelled in a way that is easily to query like Star Schema, Snowflake Schema etc...
 
-On downside of this product is that it's very expensive. Most of clients I've been working prefer Databricks to make ETL instead of Synapse.
+On downside of this product is that it's very expensive. Most of clients I've been working on prefers Databricks to make ETL instead of Synapse.
