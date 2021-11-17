@@ -212,7 +212,7 @@ To process data on demand, we could use Apache Spark Structured Streaming to ing
 
 Once it's processed, data are stored in Delta Table format which allows us to bring ACID properties from Databases to our Datalake Storage.
 
-All the initial transformation could be done by Spark and after, only a subset of data which will be used to awnser business questions can be written into a DataWarehouse solution like Azure Synapse Analytics.
+All the initial transformation could be done by Spark and after, only a subset of data which will be used to anwser business questions can be written into a DataWarehouse solution like Azure Synapse Analytics.
 
 ##### Architecture 3 - Route Events
 
