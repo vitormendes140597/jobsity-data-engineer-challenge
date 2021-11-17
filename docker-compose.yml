@@ -20,7 +20,7 @@ services:
     depends_on:
       - "timescaledb"
     environment:
-       POSTGRES_DB_HOST: "localhost"
+       POSTGRES_DB_HOST: timescaledb
        POSTGRES_DB_USER: "jobsity"
        POSTGRES_DB_PWD: "admin123"
        POSTGRES_TABLE_NAME: "trips"
