@@ -23,6 +23,10 @@
   - [Test and Results](#test-and-results)
     - [Weekly Average number of trips - Performance](#weekly-average-number-of-trips---performance)
     - [Ingestion - Performance](#ingestion---performance)
+  - [How to Setup](#how-to-setup)
+  - [Initial Setup](#initial-setup)
+    - [Environment Variables](#environment-variables)
+    - [Docker Compose](#docker-compose)
 
 ## About the Challenge
 
@@ -130,3 +134,44 @@ Since I've modeled that in a timeseries way and also I'm using TimescaleDB, I co
 Notice that Data Ingestor API is not resposible for write data into my Database, actually it just coordinate db actions. On db side, I've decided to use ```COPY``` command since it's database native and performs much better for bulk inserts than any other possible tool in this scenario like pandas dataframes.
 
 It takes approx 1.3 minutes to ingest 5 million rows.
+
+### How to Setup
+
+### Initial Setup
+All containers are orchestrated by a ```docker-compose.yml``` file which is available in this github repository.
+
+**Very Important**: Make sure to create the following directory structure before call docker-compose. The dir *data* is required and also its two child directories: *landing* and *processed*. 
+
+```bash
+├── data
+│   ├── landing
+│       └── trips.csv
+│   └── processed
+├── docker-compose.yml
+```
+
+Put all csv files inside ```data/landing```. All these directories will be mounted to container's internals folder.
+
+#### Environment Variables
+
+The bold ones are required env variables. All variables must be specified in docker-compose file.
+
+* **POSTGRES_DB_HOST**: Postgre Host
+* **POSTGRES_DB_USER**: DB username
+* **POSTGRES_DB_PWD**: "DB User password"
+* **POSTGRES_TABLE_NAME**: Postgres Table Name where data will be stored in. Default is *trips*.
+* **INGESTION_FILE_PATH**: File path where landing csv files are stored. 
+* **INGESTION_PROCESSED_PATH**: File path where processed csv file will me moved after being ingested.
+* NOTIFICATION_EMAIL_USER_LOGIN: email address which will be used to sent and receive etl reports.
+* NOTIFICATION_EMAIL_USER_PWD: email address password
+
+**OBS**: Notification variables must be filled in order to report feature works. It only works with GMAIL SMTP protocol. When I developed it, I noticed that the email address owner must enable some configuration settings in his Google Account. I've done it, so I could make it work and show you guys a print how it looks like, but without its permissions enabled, this feature won't work.
+
+#### Docker Compose
+
+Make sure you have Docker and Docker Compose installed and your computer's port 5000 and 5432 are not being used. After that you can just call
+
+```bash
+docker-compose up
+```
+<img src="images/docker-running.png" alt="drawing"/>
