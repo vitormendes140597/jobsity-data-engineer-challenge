@@ -224,7 +224,7 @@ This event must have a ```event handler```, who is responsible for handle this e
 
 We could use it to process a csv file imediatly after its creation on storage.
 
-An Azure function can be used to write data directly into DB, or we can send a HTTP Request to an API (like I did), using Azure Web App, and its take the responsibility to orchestrate and insert data into DB.
+An Azure function can be used to write data directly into DB, or we can send a HTTP Request to an API (like I did), like Azure Web App, and it takes the responsibility to orchestrate and insert data into DB.
 
 ##### Architecture 4 - DataWarehouse
 
