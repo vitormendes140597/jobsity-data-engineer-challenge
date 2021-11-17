@@ -17,9 +17,11 @@
     - [Data Modelling](#data-modelling)
     - [Postgres TimescaleDB](#postgres-timescaledb)
     - [Postgres PostGIS](#postgres-postgis)
-  - [Flask and Python - API](#flask-and-python---api)
-  - [Docker](#docker)
+    - [Flask and Python - API](#flask-and-python---api)
+    - [Docker](#docker)
   - [How it works?](#how-it-works)
+  - [Test and Results](#test-and-results)
+  - [Weekly Average number of trips - Performance](#weekly-average-number-of-trips---performance)
 
 ## About the Challenge
 
@@ -69,13 +71,13 @@ PostGIS is a spatial database extender for PostgreSQL object-relational database
 
 Some queries requires spatial and geometry oriented functions to be solved. Because of that I've decided to include PostGIS as part of my architecture solution.
 
-### Flask and Python - API
+#### Flask and Python - API
 
 Flask is a Python web microframework which allow us to websites, Rest APIs etc...
 
-A HTTP Trigger oriented ETL was choosen since it's a easy way to invoke ETL process on demand. 
+A HTTP Trigger oriented Job was choosen since it's a easy way to invoke ETL process on demand. 
 
-### Docker
+#### Docker
 
 All the components described above are containerized, so it can easily be deployed anywhere.
 
@@ -88,3 +90,36 @@ Bellow are all images that's being used for this project.
 
 ###  How it works?
 
+1) After setup is completed, Data Ingestor API will listen port **5000**. ETL processed are triggered when a **GET HTTP Resquest** is made in ```/ingest``` endpoint.
+
+2) Once ETL ingestion is invoked, it will list each ```.csv``` in ```/data/landing``` directory. It's not a strict rule, but it's expected each file to have between 500mb - 2gb. 
+
+3) A ```COPY``` command is invoked by TimescaleDB using pyscopg2 library, for every existing file in landing dir. A ```commit``` operation is done after each copy statement call, so if a failure happends while ingestion a csv file, it not impacts the previous ones. If you would like to see code in details, please go to ```IngestorCoordinator/database.py``` and check *load_into_table* function.
+
+4) After tried to ingest every csv file, a notification report is sent by email for the email address filled in ```NOTIFICATION_EMAIL_USER_LOGIN``` environment variable. Please, notice that notification feature is not enable by default and it only works for GMAIL. In fact its requires ```NOTIFICATION_EMAIL_USER_LOGIN``` and ```NOTIFICATION_EMAIL_USER_PWD``` to work (you just need to specify them in our environment variables).
+
+<img src="images/email_notification.png" alt="drawing"/> 
+
+The above picture shows how the etl report looks like. Each line of the table correspond a status of ingestion for each file.
+
+I know it's a very simple solution, but my main focus was to make sure the architecture is performing well.
+
+5) If there are several files in landing dir, it will take some minutes to finish the ingestion process. A HTTP Response with status 200 will appear if everything was ok.
+
+6) After csv files being ingested, a table in Postgres will be ready to serve that data. The table name is ```public.trips```. 
+
+### Test and Results
+
+Both containers were running in the same machine with 4 vCPU, 16GB RAM and SSD disk. For this challenge I used my personal notebook.
+
+I replicated the original dataset in order to get several files with 5 million records each. I could not test with an input of 100 million rows since my machine do not have enough disk, but I was able to ingest 45 million rows. The following picture shows the total number of records for trips table.
+
+<img src="images/table_count.png" alt="drawing"/>
+
+### Weekly Average number of trips - Performance
+
+Since I've modeled that in a timeseries way and also I'm using TimescaleDB, I could achieve a very good performance (15.9 seconds) in this query which envolves basically a full scan in database + OLAP operations.
+
+Take notice that database cache feature was not enabled.
+
+<img src="images/olap_query_count.png" alt="drawing"/>
