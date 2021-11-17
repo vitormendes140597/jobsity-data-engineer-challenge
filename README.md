@@ -24,9 +24,13 @@
     - [Weekly Average number of trips - Performance](#weekly-average-number-of-trips---performance)
     - [Ingestion - Performance](#ingestion---performance)
   - [How to Setup](#how-to-setup)
-  - [Initial Setup](#initial-setup)
+    - [Initial Setup](#initial-setup)
     - [Environment Variables](#environment-variables)
     - [Docker Compose](#docker-compose)
+  - [Sketch up on Cloud](#sketch-up-on-cloud)
+    - [Would I migrate it to Cloud as Lift and Shift?](#would-i-migrate-it-to-cloud-as-lift-and-shift)
+    - [Microsoft Azure](#microsoft-azure)
+    - [AWS](#aws)
 
 ## About the Challenge
 
@@ -137,7 +141,7 @@ It takes approx 1.3 minutes to ingest 5 million rows.
 
 ### How to Setup
 
-### Initial Setup
+#### Initial Setup
 All containers are orchestrated by a ```docker-compose.yml``` file which is available in this github repository.
 
 **Very Important**: Make sure to create the following directory structure before call docker-compose. The dir *data* is required and also its two child directories: *landing* and *processed*. 
@@ -175,3 +179,13 @@ Make sure you have Docker and Docker Compose installed and your computer's port 
 docker-compose up
 ```
 <img src="images/docker-running.png" alt="drawing"/>
+
+### Sketch up on Cloud
+
+#### Would I migrate it to Cloud as Lift and Shift?
+
+Please take notice that the architecture I've proposed here is based on challenge's mandatory features. It does not reflect what I'd do if I was in a cloud native scenario. Because of that, instead of saying how I'd migrate it to cloud, I prefer to redesign and rearchitect my solution, based on each cloud providers I'm experienced in.
+
+#### Microsoft Azure
+
+#### AWS
