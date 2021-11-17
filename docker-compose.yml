@@ -15,7 +15,7 @@ services:
       - ${PWD}/data:/data
   ingestorapi:
     container_name: "jobsity_ingestor"
-    image: "vitorhmendes97/jobsity-ingestor:latest"
+    image: "vitorhmendes97/jobsity-ingestor"
     ports: ["5000:5000"]
     depends_on:
       - "timescaledb"
