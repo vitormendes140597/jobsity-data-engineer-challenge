@@ -21,7 +21,8 @@
     - [Docker](#docker)
   - [How it works?](#how-it-works)
   - [Test and Results](#test-and-results)
-  - [Weekly Average number of trips - Performance](#weekly-average-number-of-trips---performance)
+    - [Weekly Average number of trips - Performance](#weekly-average-number-of-trips---performance)
+    - [Ingestion - Performance](#ingestion---performance)
 
 ## About the Challenge
 
@@ -116,10 +117,16 @@ I replicated the original dataset in order to get several files with 5 million r
 
 <img src="images/table_count.png" alt="drawing"/>
 
-### Weekly Average number of trips - Performance
+#### Weekly Average number of trips - Performance
 
 Since I've modeled that in a timeseries way and also I'm using TimescaleDB, I could achieve a very good performance (15.9 seconds) in this query which envolves basically a full scan in database + OLAP operations.
 
-Take notice that database cache feature was not enabled.
+*OBS: Database cache feature was not enabled.*
 
 <img src="images/olap_query_count.png" alt="drawing"/>
+
+#### Ingestion - Performance
+
+Notice that Data Ingestor API is not resposible for write data into my Database, actually it just coordinate db actions. On db side, I've decided to use ```COPY``` command since it's database native and performs much better for bulk inserts than any other possible tool in this scenario like pandas dataframes.
+
+It takes approx 1.3 minutes to ingest 5 million rows.
