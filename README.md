@@ -8,6 +8,8 @@
 |--------------|----------------------------|--------|
 | Vitor Mendes | vitormendes120@hotmail.com | Brazil |
 
+<img src="images/Imagem1.png" alt="drawing" width="200"/> 
+
 - [Data Engineer Challenge](#data-engineer-challenge)
   - [Candidate Information](#candidate-information)
 - [About the Challenge](#about-the-challenge)
