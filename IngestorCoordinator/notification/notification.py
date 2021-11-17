@@ -24,9 +24,15 @@ class EmailNotification(BaseNotification):
         self.EMAIL_USER_LOGIN = NOTIFICATION_EMAIL_USER_LOGIN
         self.EMAIL_USER_PWD = NOTIFICATION_EMAIL_USER_PWD
 
-        print(self.EMAIL_USER_LOGIN)
-        print(self.EMAIL_USER_PWD)
+    """Reports the status of ETL Execution on User's email address.
+       It basically compares what the processed have ingested against what should be.
+       If there are divergences it means that ETL processed have not finished successfully.
 
+       Keyword arguments:
+       args: A dictionare containing two keys:
+        - files_to_ingest -> list: A list of files which are available to be ingested
+        - files_ingested  -> list: A list of files which was ingested for ETL Process
+    """
     def send(self,args):
         context = ssl.create_default_context()
         today   = datetime.now().date()

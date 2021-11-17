@@ -11,10 +11,19 @@ import psycopg2
 
 app = Flask(__name__)
 
+"""Default Flask Route
+
+    Keyword arguments:
+"""
 @app.route('/')
 def hello():
-    return 'Hello, World!'
+    return 'Hello, Jobsity!'
 
+"""Setup Route creates and configures the environment for this application scope.
+   It's responsible for invoking any Database create table script.
+
+    Keyword arguments:
+"""
 @app.route('/setup')
 def setup_postgres():
     try:
@@ -28,6 +37,11 @@ def setup_postgres():
 
     return Response(json.dumps({"message": "Setup was finished successfully"}), status=200)
 
+"""Reset Route destroys all the environment assets for this application scope.
+   It's responsible for deleting any Database table and its data.
+
+    Keyword arguments:
+"""
 @app.route('/reset')
 def reset():
     try:
@@ -42,7 +56,11 @@ def reset():
     
     return Response(json.dumps({"message":"Environment was deleted Succesfully."}), status=200)
 
+"""Ingest Route reads all csv files inside a given POSIX folder and inserts it into a Database table.
 
+    Request arguments:
+    path -- An arbitraty file system path (default /data/landing)
+"""
 @app.route('/ingest')
 def ingest():
     path = request.args.get('path', type=str)
@@ -59,7 +77,3 @@ def ingest():
         conn.close()
     
     return Response(json.dumps({"message":"Data Ingested successfully"}), status=200)
-
-
-if __name__ == "__main__":
-    app.run('0.0.0.0')
