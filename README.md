@@ -29,6 +29,7 @@
     - [Initial Setup](#initial-setup)
     - [Environment Variables](#environment-variables)
     - [Docker Compose](#docker-compose)
+    - [Database Setup](#database-setup)
   - [Sketch up on Cloud](#sketch-up-on-cloud)
     - [Would I migrate it to Cloud as Lift and Shift?](#would-i-migrate-it-to-cloud-as-lift-and-shift)
     - [Microsoft Azure](#microsoft-azure)
@@ -184,6 +185,13 @@ Make sure you have Docker and Docker Compose installed and your computer's port 
 docker-compose up
 ```
 <img src="images/docker-running.png" alt="drawing"/>
+
+#### Database Setup
+
+Once containers are up, go to **localhost:5000** to check if API is running. If yes, you must run ```localhost:5000/setup``` only once. If you want to delete all the environment, please run ```localhost:5000/reset```.
+
+After that you are able to start ingesting data though ```localhost:5000/ingest``` endpoint.
+
 
 ### Sketch up on Cloud
 
