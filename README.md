@@ -4,7 +4,7 @@
 
 ### Candidate Information
 
-  | Owner        | Email Contact              | Contry |
+  | Owner        | Email Contact              | Country |
 |--------------|----------------------------|--------|
 | Vitor Mendes | vitormendes120@hotmail.com | Brazil |
 
