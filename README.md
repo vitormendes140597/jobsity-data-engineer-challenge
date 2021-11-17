@@ -218,7 +218,7 @@ All the initial transformation could be done by Spark and after, only a subset o
 
 <img src="images/eventgrid.png" alt="drawing"/>
 
-This architecture relies on Azure Event Grid to start on demand ETL process. Every time a file is written in a specific folder in Azure Blob Storage or ADLS, a event will be trigger.
+This architecture relies on Azure Event Grid to start on demand ETL process. Every time a file is written in a specific folder in Azure Blob Storage or ADLS, an event will be trigger.
 
 This event must have a ```event handler```, who is responsible for handle this event.
 
